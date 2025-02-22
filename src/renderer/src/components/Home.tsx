@@ -10,7 +10,7 @@ const Home: React.FC = () => {
       <Row>
         {imagePaths.map((path, index) => (
           <Col key={index} sm={6} md={4} lg={3}>
-            <div className="flex h-48 w-full items-center justify-center overflow-hidden rounded-lg p-5">
+            <div className="h-48 w-full items-center justify-center overflow-hidden rounded-lg p-5">
               <LazyLoad height={200} offset={100}>
                 <img
                   className="max-w-full object-cover"

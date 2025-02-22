@@ -1,4 +1,3 @@
-import { useContext } from 'react'
 import { useImageContext } from '../context/imageContext'
 
 const Settings: React.FC = () => {
