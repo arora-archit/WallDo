@@ -36,10 +36,13 @@ const Feed: React.FC = () => {
           return { id: item.id, url: '' }
         })
       )
-      const urlMap = urls.reduce((acc, { id, url }) => {
-        acc[id] = url
-        return acc
-      }, {} as { [key: string]: string })
+      const urlMap = urls.reduce(
+        (acc, { id, url }) => {
+          acc[id] = url
+          return acc
+        },
+        {} as { [key: string]: string }
+      )
       setImageUrls(urlMap)
     }
 
@@ -93,7 +96,9 @@ const Feed: React.FC = () => {
 
               {downloading[item.id] && (
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <p className="text-white text-lg font-semibold bg-black/50 px-3 py-1 rounded-md">Downloading...</p>
+                  <p className="rounded-md bg-black/50 px-3 py-1 text-lg font-semibold text-white">
+                    Downloading...
+                  </p>
                 </div>
               )}
             </div>
@@ -102,7 +107,7 @@ const Feed: React.FC = () => {
       </Row>
 
       {popupMessage && (
-        <div className="fixed bottom-4 left-1/2 -translate-x-1/2 bg-gray-900 text-white px-4 py-2 rounded-md shadow-md">
+        <div className="fixed bottom-4 left-1/2 -translate-x-1/2 rounded-md bg-gray-900 px-4 py-2 text-white shadow-md">
           {popupMessage}
         </div>
       )}

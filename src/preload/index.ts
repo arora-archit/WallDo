@@ -1,4 +1,11 @@
 import { contextBridge, ipcRenderer } from 'electron'
+
+declare global {
+  interface Window {
+    api: typeof api
+  }
+}
+
 import { electronAPI } from '@electron-toolkit/preload'
 
 const api = {
@@ -17,6 +24,6 @@ if (process.contextIsolated) {
     console.error(error)
   }
 } else {
-  window.electron = electronAPI
+  window.Electron = electronAPI as unknown as typeof Electron
   window.api = api
 }
