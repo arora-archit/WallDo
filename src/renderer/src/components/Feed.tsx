@@ -56,11 +56,11 @@ const Feed: React.FC = () => {
       <Row>
         {feed.map((item) => (
           <Col key={item.id} sm={6} md={4} lg={3}>
-            <div>
+            <div className="h-48 w-full items-center justify-center overflow-hidden rounded-lg p-5">
               {imageUrls[item.id] ? (
-                <img src={imageUrls[item.id]} alt={item.id} style={{ width: '100%' }} />
+                <img className="max-w-full object-cover" src={imageUrls[item.id]} alt={item.id} />
               ) : (
-                <p>No image available</p>
+                <p>Loading...</p>
               )}
             </div>
           </Col>
