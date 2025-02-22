@@ -5,7 +5,8 @@ const api = {
   selectDir: (): Promise<string> => ipcRenderer.invoke('choose-dir'),
   fetchWallhavenFeed: (): Promise<any> => ipcRenderer.invoke('fetch-wallhaven-feed'),
   fetchWallhavenImage: (url: string): Promise<string> =>
-    ipcRenderer.invoke('fetch-wallhaven-image', url)
+    ipcRenderer.invoke('fetch-wallhaven-image', url),
+  downloadImage: (url: string): Promise<string> => ipcRenderer.invoke('download-image', url)
 }
 
 if (process.contextIsolated) {

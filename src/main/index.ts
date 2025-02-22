@@ -2,8 +2,9 @@ import { shell, app, dialog, BrowserWindow, ipcMain } from 'electron'
 import { join } from 'path'
 import { writeFile, unlink, mkdir, rmdir, readdir } from 'fs/promises'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
-import { existsSync } from 'fs'
+import { existsSync, readFile } from 'fs'
 import axios from 'axios'
+import { promises as fs } from 'fs'
 
 const cacheDir = join(app.getPath('userData'), 'image-cache')
 
@@ -32,6 +33,31 @@ ipcMain.handle('fetch-wallhaven-image', async (event, url) => {
     return `file://${imagePath}`
   } catch (error) {
     console.error('Error fetching wallhaven image:', error)
+    throw error
+  }
+})
+ipcMain.handle('download-image', async (_, url: string) => {
+  try {
+    const response = await axios.get(url, { responseType: 'arraybuffer' })
+    const imageName = url.split('/').pop() || 'image.jpg'
+    const storedDirPath = join(app.getPath('userData'), 'selectedDir.txt')
+
+    if (
+      !(await fs
+        .access(storedDirPath)
+        .then(() => true)
+        .catch(() => false))
+    ) {
+      throw new Error('No directory selected')
+    }
+
+    const dirPath = await fs.readFile(storedDirPath, 'utf8')
+    const imagePath = join(dirPath, imageName)
+
+    await fs.writeFile(imagePath, Buffer.from(response.data))
+    return imagePath
+  } catch (error) {
+    console.error('Error downloading image:', error)
     throw error
   }
 })
@@ -65,12 +91,15 @@ function createWindow(): void {
   }
 
   ipcMain.handle('choose-dir', async () => {
-    const dirs = await dialog.showOpenDialog(mainWindow, {
+    const dirs = await dialog.showOpenDialog({
       properties: ['openDirectory']
     })
     if (dirs.canceled) return []
 
     const dirPath = dirs.filePaths[0]
+    // Save selected directory path
+    await writeFile(join(app.getPath('userData'), 'selectedDir.txt'), dirPath)
+
     const files = await readdir(dirPath)
     const imageFiles = files.filter((file) => /\.(png|jpe?g|gif|webp|bmp|svg)$/i.test(file))
     return imageFiles.map((file) => join(dirPath, file))
@@ -84,13 +113,11 @@ app.whenReady().then(() => {
     optimizer.watchWindowShortcuts(window)
   })
 
-
   ipcMain.on('ping', () => console.log('pong'))
 
   createWindow()
 
   app.on('activate', function () {
-
     if (BrowserWindow.getAllWindows().length === 0) createWindow()
   })
 })

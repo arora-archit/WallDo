@@ -4,7 +4,7 @@ import { Container, Row, Col } from 'react-grid-system'
 const Feed: React.FC = () => {
   const [feed, setFeed] = useState<unknown[]>([])
   const [loading, setLoading] = useState<boolean>(true)
-
+  const [downloading, setDownloading] = useState<{ [key: string]: boolean }>({})
   useEffect(() => {
     const fetchFeed = async () => {
       try {
@@ -49,7 +49,19 @@ const Feed: React.FC = () => {
   if (loading) {
     return <div>Loading...</div>
   }
+  const handleImageClick = async (item: any) => {
+    if (downloading[item.id]) return
 
+    try {
+      setDownloading((prev) => ({ ...prev, [item.id]: true }))
+      const imagePath = await window.api.downloadImage(item.path)
+      console.log('Image downloaded to:', imagePath)
+    } catch (error) {
+      console.error('Error downloading image:', error)
+    } finally {
+      setDownloading((prev) => ({ ...prev, [item.id]: false }))
+    }
+  }
   return (
     <Container>
       <h1>Wallhaven Feed</h1>

@@ -5,4 +5,7 @@ declare global {
     electron: ElectronAPI
     api: api
   }
+  interface api {
+    downloadImage: (url: string) => Promise<string>
+  }
 }
