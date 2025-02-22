@@ -32,7 +32,8 @@ function App(): React.JSX.Element {
       <div className={'flex flex-1 flex-col items-center justify-center p-4'}>
         <Routes>
           <Route path="/" element={<Navigate to="/home" />} />
-          <Route path="/home"
+          <Route
+            path="/home"
             element={
               <ImageProvider>
                 <Home />
