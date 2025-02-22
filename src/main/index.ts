@@ -5,7 +5,59 @@ import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import { existsSync } from 'fs'
 import axios from 'axios'
 import { promises as fs } from 'fs'
+import { exec } from 'child_process'
+import path from 'path'
+import os from 'os'
 
+function setWallpaper(imagePath: string): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const absolutePath = path.resolve(imagePath)
+    const platform = os.platform()
+
+    let command = ''
+
+    if (platform === 'win32') {
+      // Windows PowerShell command
+      command = `powershell.exe -command "(Add-Type -TypeDefinition 'using System; using System.Runtime.InteropServices; public class Wallpaper { [DllImport(\\"user32.dll\\", CharSet = CharSet.Auto)] public static extern int SystemParametersInfo(int uAction, int uParam, string lpvParam, int fuWinIni); }' -Name Wallpaper -Namespace Win32 -PassThru)::SystemParametersInfo(20, 0, '${absolutePath}', 3)"`
+    } else if (platform === 'darwin') {
+      // macOS AppleScript command
+      command = `osascript -e 'tell application "System Events" to set picture of every desktop to "${absolutePath}"'`
+    } else if (platform === 'linux') {
+      // Detect desktop environment
+      exec('echo $XDG_CURRENT_DESKTOP', (err, stdout) => {
+        const desktopEnv = stdout.trim()
+
+        if (desktopEnv.includes('KDE')) {
+          // KDE Plasma method
+          command = `plasma-apply-wallpaperimage "${absolutePath}"`
+        } else {
+          // Default to GNOME method
+          command = `gsettings set org.gnome.desktop.background picture-uri "file://${absolutePath}"`
+        }
+
+        exec(command, (error) => {
+          if (error) {
+            reject(`Error setting wallpaper on ${desktopEnv}: ${error.message}`)
+          } else {
+            resolve(`Wallpaper changed successfully on ${desktopEnv}`)
+          }
+        })
+      })
+
+      return // Prevent further execution
+    } else {
+      return reject(new Error(`Unsupported OS: ${platform}`))
+    }
+
+    exec(command, (error) => {
+      if (error) {
+        reject(`Error setting wallpaper: ${error.message}`)
+      } else {
+        resolve(`Wallpaper changed successfully on ${platform}`)
+      }
+    })
+  })
+}
 const cacheDir = join(app.getPath('userData'), 'image-cache')
 
 ipcMain.handle('fetch-wallhaven-feed', async (_event, page: number) => {
@@ -62,7 +114,15 @@ ipcMain.handle('download-image', async (_, url: string) => {
     throw error
   }
 })
-
+ipcMain.handle('set-wallpaper', async (_event, imagePath: string) => {
+  try {
+    const result = await setWallpaper(imagePath)
+    return result
+  } catch (error) {
+    console.error('Error setting wallpaper:', error)
+    throw error
+  }
+})
 function createWindow(): void {
   const mainWindow = new BrowserWindow({
     width: 900,

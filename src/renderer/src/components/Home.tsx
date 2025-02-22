@@ -1,7 +1,7 @@
 import { useImageContext } from '../context/imageContext'
 import { Container, Row, Col } from 'react-grid-system'
 import LazyLoad from 'react-lazyload'
-
+import setWallpaper from './setWallpaper'
 const Home: React.FC = () => {
   const { imagePaths } = useImageContext()
 
@@ -13,9 +13,10 @@ const Home: React.FC = () => {
             <div className="h-48 w-full items-center justify-center overflow-hidden rounded-lg p-5">
               <LazyLoad height={200} offset={100}>
                 <img
-                  className="max-w-full object-cover"
+                  className="max-w-full cursor-pointer object-cover"
                   src={`file:///${path.replace(/\\/g, '/')}`}
                   alt={`Image ${index}`}
+                  onClick={() => setWallpaper(path)}
                 />
               </LazyLoad>
             </div>
