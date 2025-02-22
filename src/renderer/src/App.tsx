@@ -1,4 +1,5 @@
 import React from 'react'
+import ImageViewer from './components/imgLoader'
 
 function App(): React.JSX.Element {
   return (
