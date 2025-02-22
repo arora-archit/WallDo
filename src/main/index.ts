@@ -2,7 +2,7 @@ import { shell, app, dialog, BrowserWindow, ipcMain } from 'electron'
 import { join } from 'path'
 import { writeFile, unlink, mkdir, rmdir, readdir } from 'fs/promises'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
-import { existsSync, readFile } from 'fs'
+import { existsSync } from 'fs'
 import axios from 'axios'
 import { promises as fs } from 'fs'
 
@@ -18,7 +18,7 @@ ipcMain.handle('fetch-wallhaven-feed', async () => {
   }
 })
 
-ipcMain.handle('fetch-wallhaven-image', async (event, url) => {
+ipcMain.handle('fetch-wallhaven-image', async (_event, url) => {
   const imageName = url.split('/').pop()
   const imagePath = join(cacheDir, imageName)
 
