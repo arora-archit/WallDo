@@ -1,5 +1,6 @@
-import { app, shell, BrowserWindow, ipcMain } from 'electron'
+import { shell, app, dialog, BrowserWindow, ipcMain } from 'electron'
 import { join } from 'path'
+import { readdir } from 'fs/promises'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 
 function createWindow(): void {
@@ -31,6 +32,18 @@ function createWindow(): void {
   } else {
     mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
   }
+
+  ipcMain.handle('choose-dir', async () => {
+    const dirs = await dialog.showOpenDialog(mainWindow, {
+      properties: ['openDirectory']
+    })
+    if (dirs.canceled) return []
+
+    const dirPath = dirs.filePaths[0]
+    const files = await readdir(dirPath)
+    const imageFiles = files.filter((file) => /\.(png|jpe?g|gif|webp|bmp|svg)$/i.test(file))
+    return imageFiles.map((file) => join(dirPath, file))
+  })
 }
 
 // This method will be called when Electron has finished

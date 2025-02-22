@@ -1,7 +1,24 @@
-import React from 'react'
+import { useContext } from 'react'
+import { useImageContext } from '../context/imageContext'
 
-function Feed(): React.JSX.Element {
-  return <div className={'text-5xl'}>Settings</div>
+const Settings: React.FC = () => {
+  const { setImagePaths } = useImageContext()
+
+  const handleSelectDirectory = async (): Promise<void> => {
+    const imagePaths = await window.api.selectDir()
+    setImagePaths(imagePaths)
+  }
+
+  return (
+    <div className="p-4">
+      <button
+        onClick={handleSelectDirectory}
+        className="rounded-lg bg-blue-500 px-4 py-2 text-white"
+      >
+        Select Directory
+      </button>
+    </div>
+  )
 }
 
-export default Feed
+export default Settings
