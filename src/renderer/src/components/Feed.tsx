@@ -1,12 +1,19 @@
 import React, { useEffect, useState } from 'react'
 import { Container, Row, Col } from 'react-grid-system'
 
+interface FeedItem {
+  id: string
+  thumbs?: {
+    small?: string
+  }
+}
+
 const Feed: React.FC = () => {
-  const [feed, setFeed] = useState<unknown[]>([])
+  const [feed, setFeed] = useState<FeedItem[]>([])
   const [loading, setLoading] = useState<boolean>(true)
 
   useEffect(() => {
-    const fetchFeed = async () => {
+    const fetchFeed = async (): Promise<void> => {
       try {
         const data = await window.api.fetchWallhavenFeed()
         console.log('Fetched data:', data)
@@ -24,7 +31,7 @@ const Feed: React.FC = () => {
   const [imageUrls, setImageUrls] = useState<{ [key: string]: string }>({})
 
   useEffect(() => {
-    const fetchImages = async () => {
+    const fetchImages = async (): Promise<void> => {
       const urls = await Promise.all(
         feed.map(async (item) => {
           if (item.thumbs && item.thumbs.small) {

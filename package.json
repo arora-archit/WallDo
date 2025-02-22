@@ -24,6 +24,7 @@
     "@electron-toolkit/preload": "^3.0.1",
     "@electron-toolkit/utils": "^4.0.0",
     "@tailwindcss/vite": "^4.0.7",
+    "axios": "^1.7.9",
     "lucide-react": "^0.475.0",
     "react-grid-system": "^8.2.1",
     "react-lazyload": "^3.2.1",
