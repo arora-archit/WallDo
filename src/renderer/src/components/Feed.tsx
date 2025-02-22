@@ -59,7 +59,7 @@ const Feed: React.FC = () => {
 
   return (
     <Container>
-      <h1>Wallhaven Feed</h1>
+      <h1 className={'flex justify-center text-3xl'}>Wallhaven Feed</h1>
       <Row>
         {feed.map((item) => (
           <Col key={item.id} sm={6} md={4} lg={3}>

@@ -10,7 +10,7 @@ import { ImageProvider } from './context/imageContext'
 function App(): React.JSX.Element {
   return (
     <div className="flex min-h-screen flex-row">
-      <nav className={'flex flex-col gap-y-4 bg-gray-700 px-4 py-3'}>
+      <nav className={'fixed top-0 left-0 flex h-screen w-48 flex-col gap-y-4 bg-gray-700 p-4'}>
         <Link to={'/home'} className={'flex flex-row gap-x-2'}>
           <House />
           <p>Home</p>
@@ -29,7 +29,7 @@ function App(): React.JSX.Element {
         </Link>
       </nav>
 
-      <div className={'flex flex-1 flex-col items-center justify-center p-4'}>
+      <div className={'ml-48 flex flex-1 flex-col items-center justify-center p-4'}>
         <Routes>
           <Route path="/" element={<Navigate to="/home" />} />
           <Route
