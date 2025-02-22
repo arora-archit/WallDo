@@ -40,7 +40,14 @@ function App(): React.JSX.Element {
               </ImageProvider>
             }
           />
-          <Route path="/feed" element={<Feed />} />
+          <Route
+            path="/feed"
+            element={
+              <ImageProvider>
+                <Feed />
+              </ImageProvider>
+            }
+          />
           <Route path="/sync" element={<Sync />} />
           <Route
             path="/settings"
