@@ -2,9 +2,11 @@ import React, { useEffect, useState } from 'react'
 import { Container, Row, Col } from 'react-grid-system'
 
 const Feed: React.FC = () => {
-  const [feed, setFeed] = useState<unknown[]>([])
+  const [feed, setFeed] = useState<any[]>([])
   const [loading, setLoading] = useState<boolean>(true)
   const [downloading, setDownloading] = useState<{ [key: string]: boolean }>({})
+  const [popupMessage, setPopupMessage] = useState<string | null>(null)
+
   useEffect(() => {
     const fetchFeed = async () => {
       try {
@@ -37,7 +39,7 @@ const Feed: React.FC = () => {
       const urlMap = urls.reduce((acc, { id, url }) => {
         acc[id] = url
         return acc
-      }, {})
+      }, {} as { [key: string]: string })
       setImageUrls(urlMap)
     }
 
@@ -47,8 +49,9 @@ const Feed: React.FC = () => {
   }, [feed])
 
   if (loading) {
-    return <div>Loading...</div>
+    return <div className="text-center text-lg font-semibold">Loading...</div>
   }
+
   const handleImageClick = async (item: any) => {
     if (downloading[item.id]) return
 
@@ -56,36 +59,53 @@ const Feed: React.FC = () => {
       setDownloading((prev) => ({ ...prev, [item.id]: true }))
       const imagePath = await window.api.downloadImage(item.path)
       console.log('Image downloaded to:', imagePath)
+      setPopupMessage(`Image downloaded to: ${imagePath}`)
     } catch (error) {
       console.error('Error downloading image:', error)
+      setPopupMessage('Error downloading image')
     } finally {
       setDownloading((prev) => ({ ...prev, [item.id]: false }))
+      setTimeout(() => setPopupMessage(null), 3000) // Hide the message after 3 seconds
     }
   }
+
   return (
     <Container>
-      <h1>Wallhaven Feed</h1>
+      <h1 className="text-2xl font-bold text-center mb-6">Wallhaven Feed</h1>
       <Row>
         {feed.map((item) => (
           <Col key={item.id} sm={6} md={4} lg={3}>
             <div
-              className={`h-48 w-full cursor-pointer items-center justify-center overflow-hidden rounded-lg p-5 ${downloading[item.id] ? 'opacity-50' : ''}`}
+              className="relative h-48 w-full cursor-pointer overflow-hidden rounded-lg"
               onClick={() => handleImageClick(item)}
             >
               {imageUrls[item.id] ? (
-                <img className="max-w-full object-cover" src={imageUrls[item.id]} alt={item.id} />
+                <img
+                  className={`h-full w-full object-cover transition-all duration-300 ${
+                    downloading[item.id] ? 'blur-sm' : ''
+                  }`}
+                  src={imageUrls[item.id]}
+                  alt={item.id}
+                />
               ) : (
-                <p>Loading...</p>
+                <p className="text-center">Loading...</p>
               )}
+
               {downloading[item.id] && (
-                <div className="bg-opacity-50 absolute inset-0 flex items-center justify-center bg-black">
-                  <p className="text-white">Downloading...</p>
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <p className="text-white text-lg font-semibold bg-black/50 px-3 py-1 rounded-md">Downloading...</p>
                 </div>
               )}
             </div>
           </Col>
         ))}
       </Row>
+
+      {popupMessage && (
+        <div className="fixed bottom-4 left-1/2 -translate-x-1/2 bg-gray-900 text-white px-4 py-2 rounded-md shadow-md">
+          {popupMessage}
+        </div>
+      )}
     </Container>
   )
 }
