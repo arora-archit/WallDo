@@ -45,7 +45,8 @@ ul {
 body {
   min-height: 100vh;
   color: var(--color-text);
-  background: var(--color-background);
+  background: linear-gradient(to bottom right, #1a1a1a, #333333, #000000);
+  color: white;
   line-height: 1.6;
   font-family:
     Inter,
