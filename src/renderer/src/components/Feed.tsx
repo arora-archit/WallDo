@@ -68,11 +68,19 @@ const Feed: React.FC = () => {
       <Row>
         {feed.map((item) => (
           <Col key={item.id} sm={6} md={4} lg={3}>
-            <div className="h-48 w-full items-center justify-center overflow-hidden rounded-lg p-5">
+            <div
+              className={`h-48 w-full cursor-pointer items-center justify-center overflow-hidden rounded-lg p-5 ${downloading[item.id] ? 'opacity-50' : ''}`}
+              onClick={() => handleImageClick(item)}
+            >
               {imageUrls[item.id] ? (
                 <img className="max-w-full object-cover" src={imageUrls[item.id]} alt={item.id} />
               ) : (
                 <p>Loading...</p>
+              )}
+              {downloading[item.id] && (
+                <div className="bg-opacity-50 absolute inset-0 flex items-center justify-center bg-black">
+                  <p className="text-white">Downloading...</p>
+                </div>
               )}
             </div>
           </Col>
