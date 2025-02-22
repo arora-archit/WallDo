@@ -1,17 +1,10 @@
-import { ImageProvider, useImageContext } from '../context/imageContext'
+import { useImageContext } from '../context/imageContext'
 import { Container, Row, Col } from 'react-grid-system'
 import LazyLoad from 'react-lazyload'
 
 const Home: React.FC = () => {
-  return (
-    <ImageProvider>
-      <InnerHome />
-    </ImageProvider>
-  )
-}
-
-function InnerHome(): JSX.Element {
   const { imagePaths } = useImageContext()
+
   return (
     <Container>
       <Row>
