@@ -6,13 +6,14 @@ const Feed: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true)
   const [downloading, setDownloading] = useState<{ [key: string]: boolean }>({})
   const [popupMessage, setPopupMessage] = useState<string | null>(null)
+  const [page, setPage] = useState<number>(1)
 
   useEffect(() => {
-    const fetchFeed = async () => {
+    const fetchFeed = async (page: number) => {
       try {
-        const data = await window.api.fetchWallhavenFeed()
+        const data = await window.api.fetchWallhavenFeed(page)
         console.log('Fetched data:', data)
-        setFeed(data.data)
+        setFeed((prevFeed) => [...prevFeed, ...data.data])
       } catch (error) {
         console.error('Error fetching feed:', error)
       } finally {
@@ -20,8 +21,8 @@ const Feed: React.FC = () => {
       }
     }
 
-    fetchFeed()
-  }, [])
+    fetchFeed(page)
+  }, [page])
 
   const [imageUrls, setImageUrls] = useState<{ [key: string]: string }>({})
 
@@ -72,6 +73,10 @@ const Feed: React.FC = () => {
     }
   }
 
+  const handleLoadMore = () => {
+    setPage((prevPage) => prevPage + 1)
+  }
+
   return (
     <Container>
       <h1 className={'flex justify-center text-3xl'}>Wallhaven Feed</h1>
@@ -111,6 +116,12 @@ const Feed: React.FC = () => {
           {popupMessage}
         </div>
       )}
+
+      <div className="flex justify-center mt-4">
+        <button onClick={handleLoadMore} className="px-4 py-2 bg-blue-500 text-white rounded-md">
+          Load More
+        </button>
+      </div>
     </Container>
   )
 }

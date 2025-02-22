@@ -8,9 +8,9 @@ import { promises as fs } from 'fs'
 
 const cacheDir = join(app.getPath('userData'), 'image-cache')
 
-ipcMain.handle('fetch-wallhaven-feed', async () => {
+ipcMain.handle('fetch-wallhaven-feed', async (_event, page: number) => {
   try {
-    const response = await axios.get('https://wallhaven.cc/api/v1/search')
+    const response = await axios.get(`https://wallhaven.cc/api/v1/search?page=${page}`)
     return response.data
   } catch (error) {
     console.error('Error fetching wallhaven feed:', error)
@@ -36,6 +36,7 @@ ipcMain.handle('fetch-wallhaven-image', async (_event, url) => {
     throw error
   }
 })
+
 ipcMain.handle('download-image', async (_, url: string) => {
   try {
     const response = await axios.get(url, { responseType: 'arraybuffer' })
