@@ -1,5 +1,5 @@
 import React from 'react'
-import { Link, Routes, Route } from 'react-router-dom'
+import { Link, Routes, Route, Navigate } from 'react-router-dom'
 import { Cloud, House, SettingsIcon, Rss } from 'lucide-react'
 import Feed from '@renderer/components/Feed'
 import Sync from '@renderer/components/Sync'
@@ -10,7 +10,7 @@ function App(): React.JSX.Element {
   return (
     <div className="flex h-screen flex-row">
       <nav className={'flex flex-col gap-y-4 bg-gray-700 px-4 py-3'}>
-        <Link to={'/'} className={'flex flex-row gap-x-2'}>
+        <Link to={'/home'} className={'flex flex-row gap-x-2'}>
           <House />
           <p>Home</p>
         </Link>
@@ -30,7 +30,8 @@ function App(): React.JSX.Element {
 
       <div className={'flex flex-1 flex-col items-center justify-center p-4'}>
         <Routes>
-          <Route path={'/'} element={<Home />} />
+          <Route path="/" element={<Navigate to="/home" />} />
+          <Route path="/home" element={<Home />} />
           <Route path="/feed" element={<Feed />} />
           <Route path="/sync" element={<Sync />} />
           <Route path="/settings" element={<Settings />} />
