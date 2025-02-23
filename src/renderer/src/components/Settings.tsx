@@ -23,31 +23,35 @@ const Settings: React.FC = () => {
     setDirectory(event.target.value)
   }
 
-  return (
-    <div className="relative flex h-screen items-center justify-center">
-      <div className="absolute backdrop-blur-md backdrop-brightness-75"></div>
-      <div>
-        <div className="relative z-10 w-[400px] rounded-2xl border border-white/20 bg-white/10 p-6 shadow-2xl backdrop-blur-xl">
-          <h1 className="mb-6 text-center text-2xl font-bold text-white">Settings</h1>
-          <div className="space-y-4">
-            <button
-              onClick={handleSelectDirectory}
-              className="w-full rounded-lg bg-blue-500 px-6 py-2 text-lg text-white shadow-md transition hover:bg-blue-600"
-            >
-              Select Directory
-            </button>
-            <input
-              type="text"
-              value={directory}
-              onChange={handleDirectoryChange}
-              className="w-full rounded-lg border border-white/20 bg-white/20 px-4 py-2 text-white placeholder-white/50 focus:ring-2 focus:ring-blue-500"
-              placeholder="Selected directory"
-            />
+  if (navigator.platform.startsWith('Linux')) {
+    return (
+      <div className="relative flex h-screen items-center justify-center">
+        <div className="absolute backdrop-blur-md backdrop-brightness-75"></div>
+        <div>
+          <div className="relative z-10 w-[400px] rounded-2xl border border-white/20 bg-white/10 p-6 shadow-2xl backdrop-blur-xl">
+            <h1 className="mb-6 text-center text-2xl font-bold text-white">Settings</h1>
+            <div className="space-y-4">
+              <button
+                onClick={handleSelectDirectory}
+                className="w-full rounded-lg bg-blue-500 px-6 py-2 text-lg text-white shadow-md transition hover:bg-blue-600"
+              >
+                Select Directory
+              </button>
+              <input
+                type="text"
+                value={directory}
+                onChange={handleDirectoryChange}
+                className="w-full rounded-lg border border-white/20 bg-white/20 px-4 py-2 text-white placeholder-white/50 focus:ring-2 focus:ring-blue-500"
+                placeholder="Selected directory"
+              />
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  )
+    )
+  } else {
+    return null
+  }
 }
 
 export default Settings
