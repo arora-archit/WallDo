@@ -7,7 +7,7 @@ const Settings: React.FC = () => {
 
   useEffect(() => {
     if (imagePaths.length > 0) {
-      const dirPath = imagePaths[0].substring(0, imagePaths[0].lastIndexOf('/'))
+      const dirPath = getDirectoryPath(imagePaths[0])
       setDirectory(dirPath)
     }
   }, [imagePaths])
@@ -15,7 +15,7 @@ const Settings: React.FC = () => {
   const handleSelectDirectory = async (): Promise<void> => {
     const selectedPaths = await window.api.selectDir()
     setImagePaths(selectedPaths)
-    const dirPath = selectedPaths[0].substring(0, selectedPaths[0].lastIndexOf('/'))
+    const dirPath = getDirectoryPath(selectedPaths[0])
     setDirectory(dirPath)
   }
 
@@ -23,7 +23,15 @@ const Settings: React.FC = () => {
     setDirectory(event.target.value)
   }
 
-  if (navigator.platform.startsWith('Linux')) {
+  const getDirectoryPath = (filePath: string): string => {
+    if (navigator.platform.startsWith('Win')) {
+      return filePath.substring(0, filePath.lastIndexOf('\\'))
+    } else {
+      return filePath.substring(0, filePath.lastIndexOf('/'))
+    }
+  }
+
+  if (navigator.platform.startsWith('Linux') || navigator.platform.startsWith('Win')) {
     return (
       <div className="relative flex h-screen items-center justify-center">
         <div className="absolute backdrop-blur-md backdrop-brightness-75"></div>
