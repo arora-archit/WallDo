@@ -84,7 +84,7 @@ const Feed: React.FC = () => {
                   </div>
                 )}
                 {downloading[item.id] && (
-                  <div className="bg-opacity-50 absolute inset-0 flex items-center justify-center bg-black">
+                  <div className="bg-opacity-50 absolute inset-0 flex items-center justify-center">
                     <p className="rounded-md bg-gray-800 px-3 py-1 text-lg font-semibold text-white">
                       Downloading...
                     </p>
