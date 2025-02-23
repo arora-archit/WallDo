@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { useImageContext } from '../context/imageContext'
 import { Container, Row, Col } from 'react-grid-system'
 import LazyLoad from 'react-lazyload'
@@ -18,7 +19,11 @@ const Home: React.FC = () => {
         <Row>
           {imagePaths.map((path, index) => (
             <Col key={index} sm={6} md={4} lg={3}>
-              <ImageCard fullResPath={path} lowResPath={getLowResPath(path)} />
+              <ImageCard
+                fullResPath={path}
+                lowResPath={getLowResPath(path)}
+                onClick={() => setWallpaper(path)}
+              />
             </Col>
           ))}
         </Row>
@@ -28,14 +33,14 @@ const Home: React.FC = () => {
 }
 
 // Component for each image
-const ImageCard: React.FC<{ fullResPath: string; lowResPath: string }> = ({
+const ImageCard: React.FC<{ fullResPath: string; lowResPath: string; onClick: () => void }> = ({
   fullResPath,
   lowResPath
 }) => {
   const [isLoaded, setIsLoaded] = useState(false)
 
   return (
-    <div className="group relative mb-4 overflow-hidden rounded-xl border border-gray-700 shadow-lg transition-all duration-300 hover:shadow-xl">
+    <div className="group relative mb-4 overflow-hidden rounded-xl">
       <LazyLoad height={150} offset={50} placeholder={<Placeholder />}>
         {/* Low-res image loads first */}
         <img
@@ -48,7 +53,6 @@ const ImageCard: React.FC<{ fullResPath: string; lowResPath: string }> = ({
           className={`h-40 w-full cursor-pointer object-cover transition-opacity duration-500 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}
           src={`file:///${fullResPath.replace(/\\/g, '/')}`}
           alt="Full Res"
-          onClick={() => setWallpaper(fullResPath)}
           onLoad={() => setIsLoaded(true)}
         />
       </LazyLoad>
@@ -64,9 +68,9 @@ const Placeholder: React.FC = () => (
 
 // Auto-scrolling text component
 const AutoScrollText: React.FC<{ text: string }> = ({ text }) => (
-  <div className="absolute bottom-0 w-full overflow-hidden bg-black/60 p-2 text-center text-sm text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+  <div className="absolute bottom-0 w-full overflow-hidden bg-black/60 p-2 text-center text-sm text-white opacity-0 transition-opacity group-hover:opacity-100">
     <div className="scrolling-text group-hover:animate-scrollText inline-block whitespace-nowrap">
-      {text}&nbsp;&nbsp;&nbsp;{text}
+      {text}
     </div>
   </div>
 )

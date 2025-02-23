@@ -32,7 +32,7 @@ function setWallpaper(imagePath: string): Promise<string> {
           command = `plasma-apply-wallpaperimage "${absolutePath}"`
         } else {
           // Default to GNOME method
-          command = `gsettings set org.gnome.desktop.background picture-uri "file://${absolutePath}"`
+          command = `gsettings set org.gnome.desktop.background picture-uri "file://${absolutePath}" && gsettings set org.gnome.desktop.background picture-uri-dark "file://${absolutePath}"`
         }
 
         exec(command, (error) => {
