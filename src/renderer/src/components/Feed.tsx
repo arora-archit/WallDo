@@ -64,7 +64,7 @@ const Feed: React.FC = () => {
   return (
     <div className="min-h-screen">
       <Container>
-        <h1 className="mb-6 text-center py-4 text-4xl font-bold text-gray-200">Wallhaven Feed</h1>
+        <h1 className="mb-6 py-4 text-center text-4xl font-bold text-gray-200">Wallhaven Feed</h1>
         <Row>
           {feed.map((item) => (
             <Col key={item.id} sm={6} md={4} lg={3}>

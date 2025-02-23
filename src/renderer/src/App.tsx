@@ -55,7 +55,12 @@ const Sidebar: React.FC = () => {
       <NavItem to="/home" icon={<HomeIcon />} label="Home" active={location.pathname === '/home'} />
       <NavItem to="/feed" icon={<Rss />} label="Feed" active={location.pathname === '/feed'} />
       <NavItem to="/sync" icon={<Cloud />} label="Sync" active={location.pathname === '/sync'} />
-      <NavItem to="/settings" icon={<SettingsIcon />} label="Settings" active={location.pathname === '/settings'} />
+      <NavItem
+        to="/settings"
+        icon={<SettingsIcon />}
+        label="Settings"
+        active={location.pathname === '/settings'}
+      />
     </nav>
   )
 }
@@ -65,7 +70,7 @@ const NavItem: React.FC<{ to: string; icon: React.ReactNode; label: string; acti
   to,
   icon,
   label,
-  active,
+  active
 }) => {
   return (
     <Link

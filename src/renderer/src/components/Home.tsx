@@ -19,11 +19,7 @@ const Home: React.FC = () => {
         <Row>
           {imagePaths.map((path, index) => (
             <Col key={index} sm={6} md={4} lg={3}>
-              <ImageCard
-                fullResPath={path}
-                lowResPath={getLowResPath(path)}
-                onClick={() => setWallpaper(path)}
-              />
+              <ImageCard fullResPath={path} lowResPath={getLowResPath(path)} />
             </Col>
           ))}
         </Row>
@@ -33,14 +29,17 @@ const Home: React.FC = () => {
 }
 
 // Component for each image
-const ImageCard: React.FC<{ fullResPath: string; lowResPath: string; onClick: () => void }> = ({
+const ImageCard: React.FC<{ fullResPath: string; lowResPath: string }> = ({
   fullResPath,
   lowResPath
 }) => {
   const [isLoaded, setIsLoaded] = useState(false)
 
   return (
-    <div className="group relative mb-4 overflow-hidden rounded-xl">
+    <div
+      className="group relative mb-4 overflow-hidden rounded-xl"
+      onClick={() => setWallpaper(fullResPath)}
+    >
       <LazyLoad height={150} offset={50} placeholder={<Placeholder />}>
         {/* Low-res image loads first */}
         <img

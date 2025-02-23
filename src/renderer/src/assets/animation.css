@@ -1,12 +1,12 @@
 @keyframes scrollText {
-    0% {
-      transform: translateX(100%);
-    }
-    100% {
-      transform: translateX(-100%);
-    }
+  0% {
+    transform: translateX(100%);
   }
-  .scrolling-text {
-    display: inline-block;
-    animation: scrollText 12s linear infinite;
+  100% {
+    transform: translateX(-100%);
   }
+}
+.scrolling-text {
+  display: inline-block;
+  animation: scrollText 12s linear infinite;
+}
